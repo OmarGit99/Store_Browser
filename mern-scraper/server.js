@@ -6,7 +6,7 @@ const { chromium } = require('playwright');
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({ origin: 'https://store-browser.vercel.app' }));
 
 const mongoURI = process.env.MONGODB_URI;
 
