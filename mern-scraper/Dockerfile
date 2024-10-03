@@ -49,3 +49,6 @@ EXPOSE 5000
 
 # Command to run your app using Xvfb
 CMD ["npm", "start"]
+
+# Command to run your app using Xvfb
+CMD ["xvfb-run", "-a", "npm", "start"]
