@@ -8,8 +8,10 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+const mongoURI = process.env.MONGODB_URI;
+
 // Connect to MongoDB
-mongoose.connect('', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongoURI', { useNewUrlParser: true, useUnifiedTopology: true });
 
 const ProductSchema = new mongoose.Schema({
     brand_name: String,
