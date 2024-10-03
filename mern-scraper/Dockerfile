@@ -45,7 +45,7 @@ COPY . .
 RUN npx playwright install
 
 # Expose the port your app runs on
-EXPOSE 3000
+EXPOSE 5000
 
 # Command to run your app using Xvfb
 CMD ["xvfb-run", "-a", "npm", "start"]
