@@ -4,7 +4,7 @@ FROM node:18
 # Set the working directory
 WORKDIR /usr/src/app
 
-# Install required packages for Playwright and Xvfb
+# Install required packages for Playwright
 RUN apt-get update && apt-get install -y \
     libnss3 \
     libxss1 \
@@ -29,7 +29,6 @@ RUN apt-get update && apt-get install -y \
     libsecret-1-0 \
     libmanette-0.2-0 \
     libgles2 \
-    xvfb \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy package.json and package-lock.json
@@ -47,8 +46,5 @@ RUN npx playwright install
 # Expose the port your app runs on
 EXPOSE 3000
 
-# Command to run your app using Xvfb
+# Command to run your app
 CMD ["npm", "start"]
-
-# Command to run your app using Xvfb
-CMD ["xvfb-run", "-a", "npm", "start"]
