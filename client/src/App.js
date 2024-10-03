@@ -44,7 +44,7 @@ function App() {
   const [results, setResults] = useState([]);
 
   const handleSearch = async () => {
-    const response = await axios.post('http://localhost:5000/scrape', { product });
+    const response = await axios.post('http://https://store-browser.onrender.com/scrape', { product });
     setResults(response.data);
   };
 
