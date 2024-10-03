@@ -159,7 +159,7 @@ app.post('/scrape', async (req, res) => {
   const { product } = req.body;
 
   // Launch the Playwright browser only once
-  const browser = await chromium.launch({ headless: false });
+  const browser = await chromium.launch({ headless: true });
 
   try {
     const swiggyData = await scrapeSwiggy(product, browser);
