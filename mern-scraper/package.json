@@ -4,7 +4,6 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "postinstall": "npx playwright install chromium && sudo apt-get update && sudo apt-get install -y libnss3 libxss1 libasound2 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libgbm1 libgtk-3-0 libxcomposite1 libxdamage1 libxrandr2 libgstreamer-gl1.0-0 libgstreamer1.0-0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly libgstreamer-plugins-bad1.0-0 libenchant-2-2 libsecret-1-0 libmanette-0.2-0 libgles2"
   },
   "dependencies": {
     "body-parser": "^1.20.3",
