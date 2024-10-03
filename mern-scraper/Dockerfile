@@ -48,4 +48,4 @@ RUN npx playwright install
 EXPOSE 5000
 
 # Command to run your app using Xvfb
-CMD ["xvfb-run", "-a", "npm", "start"]
+CMD ["npm", "start"]
