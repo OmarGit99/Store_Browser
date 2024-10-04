@@ -77,6 +77,7 @@ const DarkCardComponent = ({ brandName, price, quantity, source }) => {
               fullWidth
               variant="contained"
               href={link}
+              target="_blank"
               sx={{
                 bgcolor: theme.palette.primary.main,
                 color: theme.palette.primary.contrastText,
