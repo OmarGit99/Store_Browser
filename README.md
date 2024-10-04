@@ -49,13 +49,13 @@ This application is useful for users who want to compare product prices and avai
 
 2. **Install dependencies for the backend**:
    ```bash
-   cd backend
+   cd mern-scraper
    npm install
    ```
 
 3. **Install dependencies for the frontend**:
    ```bash
-   cd ../frontend
+   cd ../client
    npm install
    ```
 
@@ -63,13 +63,13 @@ This application is useful for users who want to compare product prices and avai
 
 1. **Start the backend server**:
    ```bash
-   cd backend
+   cd mern-scraper
    node server.js
    ```
 
 2. **Start the frontend**:
    ```bash
-   cd ../frontend
+   cd ../cliemt
    npm start
    ```
 
