@@ -35,11 +35,14 @@ const Product = mongoose.model('Product', ProductSchema);
 // Scraping function for Swiggy
 const scrapeSwiggy = async (product, browser) => {
   const context = await browser.newContext({
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
     permissions: ['geolocation'],
     geolocation: { latitude: 19.0188907, longitude: 73.0287094 },
-    viewport: { width: 1280, height: 720 }
+    viewport: { width: 1280, height: 720 },
+    deviceScaleFactor: 1,
+    isMobile: false,
+    locale: 'en-US',
   });
-
   const page = await context.newPage();
   await page.goto('https://www.swiggy.com/instamart/search');
   await page.fill('input[class="cK7Br"]', product);
@@ -65,11 +68,14 @@ const scrapeSwiggy = async (product, browser) => {
 // Scraping function for ZeptoNow
 const scrapeZeptoNow = async (product, browser) => {
   const context = await browser.newContext({
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
     permissions: ['geolocation'],
     geolocation: { latitude: 19.0188907, longitude: 73.0287094 },
-    viewport: { width: 1280, height: 720 }
+    viewport: { width: 1280, height: 720 },
+    deviceScaleFactor: 1,
+    isMobile: false,
+    locale: 'en-US',
   });
-
   const page = await context.newPage();
   await page.goto('https://www.zeptonow.com/search');
 
@@ -103,9 +109,13 @@ const scrapeZeptoNow = async (product, browser) => {
 // Scraping function for BlinkIt
 const scrapeBlinkIt = async (product, browser) => {
   const context = await browser.newContext({
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
     permissions: ['geolocation'],
     geolocation: { latitude: 19.0188907, longitude: 73.0287094 },
-    viewport: { width: 1280, height: 720 }
+    viewport: { width: 1280, height: 720 },
+    deviceScaleFactor: 1,
+    isMobile: false,
+    locale: 'en-US',
   });
 
   const page = await context.newPage();
