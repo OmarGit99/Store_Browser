@@ -43,8 +43,8 @@ This application is useful for users who want to compare product prices and avai
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/product-scraper.git
-   cd product-scraper
+   git clone https://github.com/OmarGit99/Store_Browser.git
+   cd Store_Browser
    ```
 
 2. **Install dependencies for the backend**:
