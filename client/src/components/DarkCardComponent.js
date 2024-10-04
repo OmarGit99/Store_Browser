@@ -8,26 +8,27 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { getDesignTokens } from '../theme/themePrimitives'; // Import your theme tokens
+import { getDesignTokens } from '../theme/themePrimitives';
 
 const theme = createTheme(getDesignTokens('dark'));
 
-const getLink = (source) => {
+// Update getLink to accept `product` as a parameter
+const getLink = (source, product) => {
+  const formattedProduct = encodeURIComponent(product.trim());
   switch (source.toLowerCase()) {
     case 'swiggy':
-      return 'https://www.swiggy.com/instamart';
+      return `https://www.swiggy.com/instamart/search?custom_back=true&query=${formattedProduct}`;
     case 'blinkit':
-      return 'https://blinkit.com/';
+      return `https://blinkit.com/s/?q=${formattedProduct}`;
     case 'zeptonow':
-      return 'https://www.zeptonow.com/';
+      return `https://www.zeptonow.com/search?query=${formattedProduct}`;
     default:
-      return '#'; // Default link if source is not recognized
+      return '#';
   }
 };
 
-
-const DarkCardComponent = ({ brandName, price, quantity, source }) => {
-  const link = getLink(source);
+const DarkCardComponent = ({ brandName, price, quantity, source, product }) => {
+  const link = getLink(source, product);
   return (
     <ThemeProvider theme={theme}>
       <Box
@@ -47,11 +48,11 @@ const DarkCardComponent = ({ brandName, price, quantity, source }) => {
             bgcolor: 'rgb(18,18,18)',
             boxShadow: theme.shadows[1],
             display: 'flex',
-            flexDirection: 'column', // Arrange card content vertically
-            justifyContent: 'space-between', // Space out content to push the button down
+            flexDirection: 'column',
+            justifyContent: 'space-between',
           }}
         >
-          <CardContent sx={{ flexGrow: 1 }}> {/* Ensures CardContent takes remaining space */}
+          <CardContent sx={{ flexGrow: 1 }}>
             <Typography variant="h4" color="text.primary" gutterBottom>
               {brandName}
             </Typography>
@@ -72,7 +73,7 @@ const DarkCardComponent = ({ brandName, price, quantity, source }) => {
               </Typography>
             </Box>
           </CardContent>
-          <CardActions sx={{ pt: 2, justifyContent: 'center' }}> {/* Center-align the button */}
+          <CardActions sx={{ pt: 2, justifyContent: 'center' }}>
             <Button
               fullWidth
               variant="contained"
