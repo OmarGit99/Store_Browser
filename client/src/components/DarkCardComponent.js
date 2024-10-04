@@ -12,22 +12,22 @@ import { getDesignTokens } from '../theme/themePrimitives'; // Import your theme
 
 const theme = createTheme(getDesignTokens('dark'));
 
-const getLink = (source) => {
+const getLink = (source, product) => {
+  const formattedProduct = encodeURIComponent(product.trim());
   switch (source.toLowerCase()) {
     case 'swiggy':
-      return 'https://www.swiggy.com/instamart';
+      return `https://www.swiggy.com/instamart/search?custom_back=true&query=${formattedProduct}`;
     case 'blinkit':
-      return 'https://blinkit.com/';
+      return `https://blinkit.com/s/?q=${formattedProduct}`;
     case 'zeptonow':
-      return 'https://www.zeptonow.com/';
+      return `https://www.zeptonow.com/search?query=${formattedProduct}`;
     default:
       return '#'; // Default link if source is not recognized
   }
 };
 
-
-const DarkCardComponent = ({ brandName, price, quantity, source }) => {
-  const link = getLink(source);
+const DarkCardComponent = ({ brandName, price, quantity, source, product }) => {
+  const link = getLink(source, product);
   return (
     <ThemeProvider theme={theme}>
       <Box
@@ -51,7 +51,8 @@ const DarkCardComponent = ({ brandName, price, quantity, source }) => {
             justifyContent: 'space-between', // Space out content to push the button down
           }}
         >
-          <CardContent sx={{ flexGrow: 1 }}> {/* Ensures CardContent takes remaining space */}
+          <CardContent sx={{ flexGrow: 1 }}>
+            {/* Ensures CardContent takes remaining space */}
             <Typography variant="h4" color="text.primary" gutterBottom>
               {brandName}
             </Typography>
@@ -72,7 +73,8 @@ const DarkCardComponent = ({ brandName, price, quantity, source }) => {
               </Typography>
             </Box>
           </CardContent>
-          <CardActions sx={{ pt: 2, justifyContent: 'center' }}> {/* Center-align the button */}
+          <CardActions sx={{ pt: 2, justifyContent: 'center' }}>
+            {/* Center-align the button */}
             <Button
               fullWidth
               variant="contained"
