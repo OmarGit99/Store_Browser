@@ -15,6 +15,7 @@ This application is useful for users who want to compare product prices and avai
 - [ ] Improve UI
 - [ ] Add Links to products
 - [x] Add loading indicators
+- [ ] Add user location
 - [x] Force one-time button click
 - [ ] Format product cards
 - [x] Validate blank input text
