@@ -69,7 +69,7 @@ This application is useful for users who want to compare product prices and avai
 
 2. **Start the frontend**:
    ```bash
-   cd ../cliemt
+   cd ../client
    npm start
    ```
 
