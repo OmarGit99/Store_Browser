@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import './App.css';
 import Box from '@mui/material/Box';
@@ -46,26 +46,32 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
 
+  // Create a ref to handle scrolling to the results container
+  const resultsRef = useRef(null);
+
   const handleSearch = async () => {
-    // Check if product input is empty
     if (!product.trim()) {
       alert('Please enter a valid product name.');
       return;
     }
 
-    // Set loading and disable button
     setLoading(true);
     setButtonDisabled(true);
 
-    // Perform the search request
     try {
       const response = await axios.post('https://store-browser.onrender.com/scrape', { product });
       setResults(response.data);
+      
+      // Scroll to results after loading
+      setTimeout(() => {
+        if (resultsRef.current) {
+          resultsRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 0);
     } catch (error) {
       console.error('Error fetching search results:', error);
     }
 
-    // Hide loading indicator and re-enable button after 10 seconds
     setTimeout(() => {
       setLoading(false);
       setButtonDisabled(false);
@@ -176,7 +182,7 @@ function App() {
       </Box>
 
       {/* Results Section */}
-      <Container>
+      <Container ref={resultsRef}>
         <div className="results">
           {results.map((item, index) => (
             <DarkCardComponent
@@ -189,7 +195,6 @@ function App() {
           ))}
         </div>
       </Container>
-      {/*<LogoCollection/>*/}
     </div>
   );
 }
