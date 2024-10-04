@@ -14,10 +14,10 @@ This application is useful for users who want to compare product prices and avai
 
 - [ ] Improve UI
 - [ ] Add Links to products
-- [ ] Add loading indicators
-- [ ] Force one-time button click
+- [x] Add loading indicators
+- [x] Force one-time button click
 - [ ] Format product cards
-- [ ] Validate blank input text
+- [x] Validate blank input text
 - [ ] Implement AI features
 
 ## Technologies Used
