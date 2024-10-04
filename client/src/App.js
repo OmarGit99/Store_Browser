@@ -191,6 +191,7 @@ function App() {
               price={formatPrice(item.price)}
               quantity={item.quantity}
               source={item.source}
+              product={product}
             />
           ))}
         </div>
