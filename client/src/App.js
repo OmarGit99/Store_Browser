@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './App.css';
 import Box from '@mui/material/Box';
@@ -10,7 +10,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { getDesignTokens } from './theme/themePrimitives';
-import { styled } from '@mui/material/styles';
 
 const theme = createTheme(getDesignTokens('dark'));
 
@@ -19,14 +18,18 @@ function App() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [searchAttempted, setSearchAttempted] = useState(false); // Check if a search was attempted
+  const resultsRef = useRef(null); // Reference for the results section
 
   const handleSearch = async () => {
     if (!product.trim()) {
       alert('Please enter a valid product name.');
       return;
     }
+
     setLoading(true);
     setButtonDisabled(true);
+    setSearchAttempted(true);
 
     try {
       const response = await axios.post('https://store-browser.onrender.com/scrape', { product });
@@ -41,6 +44,12 @@ function App() {
     }, 10000);
   };
 
+  useEffect(() => {
+    if (results.length > 0) {
+      resultsRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [results]); // Scroll to results when new items are loaded
+
   const formatPrice = (price) => {
     const priceStr = String(price).trim();
     if (!priceStr.startsWith('₹') && !priceStr.startsWith('Rs')) {
@@ -50,71 +59,104 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <Box
-        id="hero"
-        sx={(theme) => ({
-          width: '100%',
-          height: '100vh',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'top center',
-          backgroundImage:
-            'radial-gradient(ellipse 80% 60% at 50% -50px, hsl(210, 100%, 90%), transparent)',
-          ...theme.applyStyles('dark', {
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <Box
+          id="hero"
+          sx={{
+            width: '100%',
+            height: '100vh',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'top center',
             backgroundImage:
-              'radial-gradient(ellipse 80% 60% at 50% -50px, hsl(210, 100%, 16%), transparent)',
-          }),
-        })}
-      >
-        <Container>
-          <Stack spacing={2} sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' } }}>
-            <Typography variant="h1" sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: 'center' }}>
-              Browse&nbsp;online&nbsp;
-              <Typography component="span" variant="h1" sx={{ fontSize: 'inherit', color: 'primary.main' }}>
-                delivery stores
-              </Typography>
-            </Typography>
-
-            <Stack direction="row" spacing={2} justifyContent="center" alignItems="center">
-              <input
-                type="text"
-                value={product}
-                onChange={(e) => setProduct(e.target.value)}
-                placeholder="Enter product name"
-                style={{ padding: '12px', borderRadius: '5px', border: `1px solid ${theme.palette.grey[300]}`, width: '300px' }}
-              />
-              <Button
-                onClick={handleSearch}
-                size="small"
-                variant="contained"
-                disabled={buttonDisabled}
-                sx={{ bgcolor: theme.palette.info.main, color: theme.palette.text.secondary, '&:hover': { bgcolor: theme.palette.primary.light } }}
+              'radial-gradient(ellipse 80% 60% at 50% -50px, hsl(210, 100%, 90%), transparent)',
+          }}
+        >
+          <Container>
+            <Stack
+              spacing={2}
+              sx={{ alignItems: 'center', justifyContent: 'center', width: { xs: '100%', sm: '70%' } }}
+            >
+              <Typography
+                variant="h1"
+                sx={{
+                  display: 'flex',
+                  flexDirection: { xs: 'column', sm: 'row' },
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: 'clamp(2.5rem, 8vw, 3rem)',
+                  mb: 2,
+                }}
               >
-                {loading ? <CircularProgress size={20} /> : 'Search'}
-              </Button>
-            </Stack>
-          </Stack>
-        </Container>
-      </Box>
+                Browse&nbsp;online&nbsp;
+                <Typography
+                  component="span"
+                  variant="h1"
+                  sx={{ fontSize: 'inherit', color: 'primary.main' }}
+                >
+                  delivery stores
+                </Typography>
+              </Typography>
 
-      <Container>
-        <div className="results">
-          {results.map((item, index) => (
-            <DarkCardComponent
-              key={index}
-              brandName={item.brand_name}
-              price={formatPrice(item.price)}
-              quantity={item.quantity}
-              source={item.source}
-              product={product}  // Pass the product to the component
-            />
-          ))}
-        </div>
-      </Container>
-    </div>
+              {/* Input and Button centered */}
+              <Stack direction="row" spacing={2} justifyContent="center" alignItems="center">
+                <input
+                  type="text"
+                  value={product}
+                  onChange={(e) => setProduct(e.target.value)}
+                  placeholder="Enter product name"
+                  style={{
+                    padding: '12px',
+                    borderRadius: '5px',
+                    border: `1px solid ${theme.palette.grey[300]}`,
+                    width: '300px',
+                    textAlign: 'center',
+                  }}
+                />
+                <Button
+                  onClick={handleSearch}
+                  size="small"
+                  variant="contained"
+                  disabled={buttonDisabled}
+                  sx={{
+                    bgcolor: theme.palette.info.main,
+                    color: theme.palette.text.secondary,
+                    '&:hover': { bgcolor: theme.palette.primary.light },
+                  }}
+                >
+                  {loading ? <CircularProgress size={20} /> : 'Search'}
+                </Button>
+              </Stack>
+            </Stack>
+          </Container>
+        </Box>
+
+        {/* Results Section */}
+        <Container ref={resultsRef}>
+          <div className="results">
+            {searchAttempted && results.length === 0 ? (
+              <Typography variant="h5" sx={{ textAlign: 'center', mt: 4 }}>
+                No results found. Please try a different search.
+              </Typography>
+            ) : (
+              results.map((item, index) => (
+                <DarkCardComponent
+                  key={index}
+                  brandName={item.brand_name}
+                  price={formatPrice(item.price)}
+                  quantity={item.quantity}
+                  source={item.source}
+                  product={product} // Pass the product to the component
+                />
+              ))
+            )}
+          </div>
+        </Container>
+      </div>
+    </ThemeProvider>
   );
 }
 
