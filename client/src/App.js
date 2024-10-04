@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import DarkCardComponent from './components/DarkCardComponent';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
+import CircularProgress from '@mui/material/CircularProgress';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { getDesignTokens } from './theme/themePrimitives';
@@ -42,23 +43,40 @@ const StyledBox = styled('div')(({ theme }) => ({
 function App() {
   const [product, setProduct] = useState('');
   const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
 
   const handleSearch = async () => {
-    const response = await axios.post('https://store-browser.onrender.com/scrape', { product });
-    setResults(response.data);
+    // Check if product input is empty
+    if (!product.trim()) {
+      alert('Please enter a valid product name.');
+      return;
+    }
+
+    // Set loading and disable button
+    setLoading(true);
+    setButtonDisabled(true);
+
+    // Perform the search request
+    try {
+      const response = await axios.post('https://store-browser.onrender.com/scrape', { product });
+      setResults(response.data);
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+    }
+
+    // Hide loading indicator and re-enable button after 10 seconds
+    setTimeout(() => {
+      setLoading(false);
+      setButtonDisabled(false);
+    }, 10000);
   };
 
   const formatPrice = (price) => {
-    
     const priceStr = String(price).trim();
-    
-    
     if (!priceStr.startsWith('₹') && !priceStr.startsWith('Rs')) {
-     
       return `₹${priceStr}`;
     }
-    
-    
     return priceStr;
   };
 
@@ -141,6 +159,7 @@ function App() {
                 onClick={handleSearch}
                 size="small"
                 variant="contained"
+                disabled={buttonDisabled}
                 sx={{
                   bgcolor: theme.palette.info.main,
                   color: theme.palette.text.secondary,
@@ -149,12 +168,13 @@ function App() {
                   },
                 }}
               >
-                Search
+                {loading ? <CircularProgress size={20} /> : 'Search'}
               </Button>
             </Stack>
           </Stack>
         </Container>
       </Box>
+
       {/* Results Section */}
       <Container>
         <div className="results">
