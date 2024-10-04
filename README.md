@@ -18,6 +18,7 @@ This application is useful for users who want to compare product prices and avai
 - [x] Force one-time button click
 - [ ] Format product cards
 - [x] Validate blank input text
+- [ ] Add LogoCollection
 - [ ] Implement AI features
 
 ## Technologies Used
