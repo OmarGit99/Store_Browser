@@ -13,6 +13,7 @@ This application is useful for users who want to compare product prices and avai
 ## TODO
 
 - [ ] Improve UI
+- [ ] Add Links to products
 - [ ] Add loading indicators
 - [ ] Force one-time button click
 - [ ] Format product cards
