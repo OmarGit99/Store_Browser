@@ -10,32 +10,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { getDesignTokens } from './theme/themePrimitives';
-import { styled } from '@mui/material/styles';
 
 const theme = createTheme(getDesignTokens('dark'));
-
-const StyledBox = styled('div')(({ theme }) => ({
-  alignSelf: 'center',
-  width: '100%',
-  height: 400,
-  marginTop: theme.spacing(8),
-  borderRadius: theme.shape.borderRadius,
-  outline: '6px solid',
-  outlineColor: 'hsla(220, 25%, 80%, 0.2)',
-  border: '1px solid',
-  borderColor: theme.palette.grey[200],
-  boxShadow: '0 0 12px 8px hsla(220, 25%, 80%, 0.2)',
-  backgroundSize: 'cover',
-  [theme.breakpoints.up('sm')]: {
-    marginTop: theme.spacing(10),
-    height: 700,
-  },
-  ...theme.applyStyles('dark', {
-    boxShadow: '0 0 24px 12px hsla(210, 100%, 25%, 0.2)',
-    outlineColor: 'hsla(220, 20%, 42%, 0.1)',
-    borderColor: theme.palette.grey[700],
-  }),
-}));
 
 function App() {
   const [product, setProduct] = useState('');
@@ -48,7 +24,6 @@ function App() {
       alert('Please enter a valid product name.');
       return;
     }
-
     setLoading(true);
     setButtonDisabled(true);
 
@@ -74,35 +49,79 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <Box id="hero">
-        {/* Input and Button */}
-        <input
-          type="text"
-          value={product}
-          onChange={(e) => setProduct(e.target.value)}
-          placeholder="Enter product name"
-        />
-        <Button onClick={handleSearch} disabled={buttonDisabled}>
-          {loading ? <CircularProgress size={20} /> : 'Search'}
-        </Button>
-      </Box>
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <Box
+          id="hero"
+          sx={(theme) => ({
+            width: '100%',
+            height: '100vh',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'top center',
+            backgroundImage:
+              'radial-gradient(ellipse 80% 60% at 50% -50px, hsl(210, 100%, 90%), transparent)',
+            ...theme.applyStyles('dark', {
+              backgroundImage:
+                'radial-gradient(ellipse 80% 60% at 50% -50px, hsl(210, 100%, 16%), transparent)',
+            }),
+          })}
+        >
+          <Container>
+            <Stack spacing={2} sx={{ alignItems: 'center', width: { xs: '100%', sm: '70%' } }}>
+              <Typography variant="h1" sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: 'center' }}>
+                Browse&nbsp;online&nbsp;
+                <Typography component="span" variant="h1" sx={{ fontSize: 'inherit', color: 'primary.main' }}>
+                  delivery stores
+                </Typography>
+              </Typography>
 
-      <Container>
-        <div className="results">
-          {results.map((item, index) => (
-            <DarkCardComponent
-              key={index}
-              brandName={item.brand_name}
-              price={formatPrice(item.price)}
-              quantity={item.quantity}
-              source={item.source}
-              product={product} // Pass product prop here
-            />
-          ))}
-        </div>
-      </Container>
-    </div>
+              <Stack direction="row" spacing={2} justifyContent="center" alignItems="center">
+                <input
+                  type="text"
+                  value={product}
+                  onChange={(e) => setProduct(e.target.value)}
+                  placeholder="Enter product name"
+                  style={{ padding: '12px', borderRadius: '5px', border: `1px solid ${theme.palette.grey[300]}`, width: '300px' }}
+                />
+                <Button
+                  onClick={handleSearch}
+                  size="small"
+                  variant="contained"
+                  disabled={buttonDisabled}
+                  sx={{ bgcolor: theme.palette.info.main, color: theme.palette.text.secondary, '&:hover': { bgcolor: theme.palette.primary.light } }}
+                >
+                  {loading ? <CircularProgress size={20} /> : 'Search'}
+                </Button>
+              </Stack>
+            </Stack>
+          </Container>
+        </Box>
+
+        <Container>
+          <div className="results">
+            {results.length > 0 ? (
+              results.map((item, index) => (
+                <DarkCardComponent
+                  key={index}
+                  brandName={item.brand_name}
+                  price={formatPrice(item.price)}
+                  quantity={item.quantity}
+                  source={item.source}
+                  product={product} // Pass the product to the component
+                />
+              ))
+            ) : (
+              <Typography variant="h5" sx={{ textAlign: 'center', mt: 4 }}>
+                No results found. Please try a different search.
+              </Typography>
+            )}
+          </div>
+        </Container>
+      </div>
+    </ThemeProvider>
   );
 }
 
