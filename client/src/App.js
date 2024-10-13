@@ -59,7 +59,7 @@ function App() {
     setButtonDisabled(true);
 
     try {
-      const response = await axios.post('https://7d56-2405-201-1f-2164-b3f0-fbe5-936d-1694.ngrok-free.app/scrape', { product });
+      const response = await axios.post('https://61e7-2405-201-1f-2164-b3f0-fbe5-936d-1694.ngrok-free.app/scrape', { product });
       setResults(response.data);
       
       // Scroll to results after loading
