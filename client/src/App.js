@@ -89,7 +89,7 @@ function App() {
     setButtonDisabled(true);
 
     try {
-      const response = await axios.post('https://61e7-2405-201-1f-2164-b3f0-fbe5-936d-1694.ngrok-free.app/scrape', {
+      const response = await axios.post('https://store-browser.onrender.com/scrape', {
         product,
         latitude: location.latitude,
         longitude: location.longitude
