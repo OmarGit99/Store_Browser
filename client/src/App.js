@@ -89,11 +89,15 @@ function App() {
     setButtonDisabled(true);
 
     try {
+<<<<<<< HEAD
       const response = await axios.post('https://61e7-2405-201-1f-2164-b3f0-fbe5-936d-1694.ngrok-free.app/scrape', {
         product,
         latitude: location.latitude,
         longitude: location.longitude,
       });
+=======
+      const response = await axios.post('https://61e7-2405-201-1f-2164-b3f0-fbe5-936d-1694.ngrok-free.app/scrape', { product });
+>>>>>>> 04d1710614ab891d17759375a2dbf9f63d24c506
       setResults(response.data);
 
       // Scroll to results after loading
