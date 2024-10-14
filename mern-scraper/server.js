@@ -33,11 +33,13 @@ const ProductSchema = new mongoose.Schema({
 const Product = mongoose.model('Product', ProductSchema);
 
 // Scraping function for Swiggy
-const scrapeSwiggy = async (product, browser) => {
+const scrapeSwiggy = async (product, browser, userlocation) => {
+  const {latitude, longitude} = userlocation; 
+
   const context = await browser.newContext({
     userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
     permissions: ['geolocation'],
-    geolocation: { latitude: 19.0188907, longitude: 73.0287094 },
+    geolocation: { latitude, longitude },
     viewport: { width: 1280, height: 720 },
     deviceScaleFactor: 1,
     isMobile: false,
@@ -67,10 +69,12 @@ const scrapeSwiggy = async (product, browser) => {
 
 // Scraping function for ZeptoNow
 const scrapeZeptoNow = async (product, browser) => {
+  const {latitude, longitude} = userlocation; 
+  
   const context = await browser.newContext({
     userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
     permissions: ['geolocation'],
-    geolocation: { latitude: 19.0188907, longitude: 73.0287094 },
+    geolocation: { latitude, longitude },
     viewport: { width: 1280, height: 720 },
     deviceScaleFactor: 1,
     isMobile: false,
@@ -108,16 +112,17 @@ const scrapeZeptoNow = async (product, browser) => {
 
 // Scraping function for BlinkIt
 const scrapeBlinkIt = async (product, browser) => {
+  const {latitude, longitude} = userlocation; 
+  
   const context = await browser.newContext({
     userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
     permissions: ['geolocation'],
-    geolocation: { latitude: 19.0188907, longitude: 73.0287094 },
+    geolocation: { latitude, longitude },
     viewport: { width: 1280, height: 720 },
     deviceScaleFactor: 1,
     isMobile: false,
     locale: 'en-US',
   });
-
   const page = await context.newPage();
   await page.goto('https://blinkit.com/s/');
 
@@ -178,9 +183,9 @@ app.post('/scrape', async (req, res) => {
       longitude: longitude || 73.0287094, // Default longitude
     };
 
-    const swiggyData = await scrapeSwiggy(product, browser);
-    const zeptonowData = await scrapeZeptoNow(product, browser);
-    const blinkitData = await scrapeBlinkIt(product, browser);
+    const swiggyData = await scrapeSwiggy(product, browser, geolocation);
+    const zeptonowData = await scrapeZeptoNow(product, browser, geolocation);
+    const blinkitData = await scrapeBlinkIt(product, browser, geolocation);
 
     const products = interleaveResults([swiggyData, zeptonowData, blinkitData]);
 
