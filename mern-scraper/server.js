@@ -68,7 +68,7 @@ const scrapeSwiggy = async (product, browser, userlocation) => {
 };
 
 // Scraping function for ZeptoNow
-const scrapeZeptoNow = async (product, browser) => {
+const scrapeZeptoNow = async (product, browser, userlocation) => {
   const {latitude, longitude} = userlocation; 
   
   const context = await browser.newContext({
@@ -111,7 +111,7 @@ const scrapeZeptoNow = async (product, browser) => {
 };
 
 // Scraping function for BlinkIt
-const scrapeBlinkIt = async (product, browser) => {
+const scrapeBlinkIt = async (product, browser, userlocation) => {
   const {latitude, longitude} = userlocation; 
   
   const context = await browser.newContext({
