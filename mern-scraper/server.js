@@ -16,7 +16,7 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-const mongoURI = process.env.MONGODB_URI || 'YOUR_MONGODB_CONNECTION_STRING_HERE';
+const mongoURI = process.env.MONGODB_URI || 'YOUR MONGODB CONNECTION URI';
 
 // Connect to MongoDB
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
@@ -166,12 +166,18 @@ const interleaveResults = (arrays) => {
 
 // Main scrape endpoint
 app.post('/scrape', async (req, res) => {
-  const { product } = req.body;
+  const { product, latitude, longitude } = req.body;
 
   // Launch the Playwright browser only once
   const browser = await chromium.launch({ headless: true });
 
   try {
+
+    const geolocation = {
+      latitude: latitude || 19.0188907, // Default latitude
+      longitude: longitude || 73.0287094, // Default longitude
+    };
+
     const swiggyData = await scrapeSwiggy(product, browser);
     const zeptonowData = await scrapeZeptoNow(product, browser);
     const blinkitData = await scrapeBlinkIt(product, browser);

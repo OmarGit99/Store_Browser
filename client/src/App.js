@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
 import Box from '@mui/material/Box';
@@ -11,7 +11,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { getDesignTokens } from './theme/themePrimitives';
 import { styled } from '@mui/material/styles';
-import LogoCollection from './components/LogoCollection';
 
 const theme = createTheme(getDesignTokens('dark'));
 
@@ -45,9 +44,35 @@ function App() {
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [location, setLocation] = useState({ latitude: null, longitude: null });
+  const [locationLoading, setLocationLoading] = useState(true);
 
   // Create a ref to handle scrolling to the results container
   const resultsRef = useRef(null);
+
+  // Automatically request location when page loads
+  useEffect(() => {
+    if ('geolocation' in navigator) {
+      setLocationLoading(true);
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+          setLocationLoading(false);
+        },
+        (error) => {
+          console.error('Error getting location:', error);
+          alert('Could not get location. Make sure location services are enabled.');
+          setLocationLoading(false);
+        }
+      );
+    } else {
+      alert('Geolocation is not available in this browser.');
+      setLocationLoading(false);
+    }
+  }, []); // Empty dependency array means this runs once on component mount
 
   const handleSearch = async () => {
     if (!product.trim()) {
@@ -55,13 +80,22 @@ function App() {
       return;
     }
 
+    if (!location.latitude || !location.longitude) {
+      alert('Location is required to proceed. Please enable location services.');
+      return;
+    }
+
     setLoading(true);
     setButtonDisabled(true);
 
     try {
-      const response = await axios.post('https://store-browser.onrender.com/scrape', { product });
+      const response = await axios.post('https://61e7-2405-201-1f-2164-b3f0-fbe5-936d-1694.ngrok-free.app/scrape', {
+        product,
+        latitude: location.latitude,
+        longitude: location.longitude,
+      });
       setResults(response.data);
-      
+
       // Scroll to results after loading
       setTimeout(() => {
         if (resultsRef.current) {
@@ -177,6 +211,21 @@ function App() {
                 {loading ? <CircularProgress size={20} /> : 'Search'}
               </Button>
             </Stack>
+
+            {/* Show location loading state */}
+            {locationLoading ? (
+              <Typography variant="body1" color="textSecondary">
+                Acquiring location...
+              </Typography>
+            ) : location.latitude && location.longitude ? (
+              <Typography variant="body1" color="textSecondary">
+                Location acquired (Lat: {location.latitude}, Long: {location.longitude})
+              </Typography>
+            ) : (
+              <Typography variant="body1" color="error">
+                Failed to acquire location
+              </Typography>
+            )}
           </Stack>
         </Container>
       </Box>
